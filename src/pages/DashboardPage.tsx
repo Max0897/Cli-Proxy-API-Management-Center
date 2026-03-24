@@ -21,10 +21,7 @@ interface QuickStat {
 }
 
 interface ProviderStats {
-  gemini: number | null;
   codex: number | null;
-  claude: number | null;
-  openai: number | null;
 }
 
 export function DashboardPage() {
@@ -47,12 +44,7 @@ export function DashboardPage() {
     authFiles: null
   });
 
-  const [providerStats, setProviderStats] = useState<ProviderStats>({
-    gemini: null,
-    codex: null,
-    claude: null,
-    openai: null
-  });
+  const [providerStats, setProviderStats] = useState<ProviderStats>({ codex: null });
 
   const [loading, setLoading] = useState(true);
 
@@ -128,13 +120,10 @@ export function DashboardPage() {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        const [keysRes, filesRes, geminiRes, codexRes, claudeRes, openaiRes] = await Promise.allSettled([
+        const [keysRes, filesRes, codexRes] = await Promise.allSettled([
           apiKeysApi.list(),
           authFilesApi.list(),
-          providersApi.getGeminiKeys(),
-          providersApi.getCodexConfigs(),
-          providersApi.getClaudeConfigs(),
-          providersApi.getOpenAIProviders()
+          providersApi.getCodexConfigs()
         ]);
 
         setStats({
@@ -143,10 +132,7 @@ export function DashboardPage() {
         });
 
         setProviderStats({
-          gemini: geminiRes.status === 'fulfilled' ? geminiRes.value.length : null,
-          codex: codexRes.status === 'fulfilled' ? codexRes.value.length : null,
-          claude: claudeRes.status === 'fulfilled' ? claudeRes.value.length : null,
-          openai: openaiRes.status === 'fulfilled' ? openaiRes.value.length : null
+          codex: codexRes.status === 'fulfilled' ? codexRes.value.length : null
         });
       } finally {
         setLoading(false);
@@ -161,23 +147,7 @@ export function DashboardPage() {
     }
   }, [connectionStatus, fetchModels]);
 
-  // Calculate total provider keys only when all provider stats are available.
-  const providerStatsReady =
-    providerStats.gemini !== null &&
-    providerStats.codex !== null &&
-    providerStats.claude !== null &&
-    providerStats.openai !== null;
-  const hasProviderStats =
-    providerStats.gemini !== null ||
-    providerStats.codex !== null ||
-    providerStats.claude !== null ||
-    providerStats.openai !== null;
-  const totalProviderKeys = providerStatsReady
-    ? (providerStats.gemini ?? 0) +
-      (providerStats.codex ?? 0) +
-      (providerStats.claude ?? 0) +
-      (providerStats.openai ?? 0)
-    : 0;
+  const codexStatsReady = providerStats.codex !== null;
 
   const quickStats: QuickStat[] = [
     {
@@ -189,18 +159,13 @@ export function DashboardPage() {
       sublabel: t('nav.config_management')
     },
     {
-      label: t('nav.ai_providers'),
-      value: loading ? '-' : providerStatsReady ? totalProviderKeys : '-',
+      label: t('nav.codex'),
+      value: loading ? '-' : providerStats.codex ?? '-',
       icon: <IconBot size={24} />,
       path: '/ai-providers',
       loading: loading,
-      sublabel: hasProviderStats
-        ? t('dashboard.provider_keys_detail', {
-            gemini: providerStats.gemini ?? '-',
-            codex: providerStats.codex ?? '-',
-            claude: providerStats.claude ?? '-',
-            openai: providerStats.openai ?? '-'
-          })
+      sublabel: codexStatsReady
+        ? t('dashboard.codex_provider_detail', { count: providerStats.codex ?? 0 })
         : undefined
     },
     {
