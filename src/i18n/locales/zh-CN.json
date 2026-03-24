@@ -1371,6 +1371,7 @@
     "link_webui_repo_desc": "管理中心前端界面源代码",
     "link_docs": "使用教程",
     "link_docs_desc": "配置指南和使用说明",
+    "author_desc": "当前维护者与面板所有者",
     "clear_login_title": "本地登录信息",
     "clear_login_desc": "清理本地保存的登录信息并退出登录，不会影响使用统计中的价格设置。",
     "clear_login_button": "清理登录信息",

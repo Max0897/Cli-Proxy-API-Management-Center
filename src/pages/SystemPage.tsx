@@ -42,6 +42,9 @@ const MODEL_CATEGORY_ICONS: Record<string, string | { light: string; dark: strin
   minimax: iconMinimax,
 };
 
+const AUTHOR_NAME = 'Max';
+const PANEL_REPOSITORY_URL = 'https://github.com/Max0897/Cli-Proxy-API-Management-Center';
+
 const parseVersionSegments = (version?: string | null) => {
   if (!version) return null;
   const cleaned = version.trim().replace(/^v/i, '');
@@ -390,6 +393,12 @@ export function SystemPage() {
               <div className={styles.tileValue}>{t(`common.${auth.connectionStatus}_status`)}</div>
               <div className={styles.tileSub}>{auth.apiBase || '-'}</div>
             </div>
+
+            <div className={styles.infoTile}>
+              <div className={styles.tileLabel}>{t('footer.author')}</div>
+              <div className={styles.tileValue}>{AUTHOR_NAME}</div>
+              <div className={styles.tileSub}>{t('system_info.author_desc')}</div>
+            </div>
           </div>
         </Card>
 
@@ -415,7 +424,7 @@ export function SystemPage() {
             </a>
 
             <a
-              href="https://github.com/router-for-me/Cli-Proxy-API-Management-Center"
+              href={PANEL_REPOSITORY_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.linkCard}

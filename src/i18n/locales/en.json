@@ -1371,6 +1371,7 @@
     "link_webui_repo_desc": "Management Center frontend source code",
     "link_docs": "Documentation",
     "link_docs_desc": "Usage tutorials and configuration guides",
+    "author_desc": "Current maintainer and panel owner",
     "clear_login_title": "Local Login Data",
     "clear_login_desc": "Clear locally saved login data and sign out. Usage stats pricing settings will remain untouched.",
     "clear_login_button": "Clear login data",
